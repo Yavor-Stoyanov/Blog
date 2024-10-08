@@ -1,48 +1,56 @@
 body {
-    margin: 0;
     font-family: Arial, sans-serif;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    text-align: center;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
 }
 
 .image-container {
     width: 100%;
-    height: 50vh; /* Половината от височината на екрана */
-    overflow: hidden; /* Скрива част от изображението, което излиза извън контейнера */
+    height: 50vh;
+    overflow: hidden;
 }
 
 img {
-    width: 100%; /* Изображението заема цялата ширина на контейнера */
-    height: auto; /* Автоматично настройва височината, за да запази пропорциите */
-    object-fit: cover; /* Запазва пропорциите и изрязва част от изображението */
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
 
 header {
-    background-color: #333; /* Тъмен фон за хедъра */
-    color: white; /* Бял текст */
-    padding: 10px 0; /* Отстъп отгоре и отдолу */
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
 }
 
 nav ul {
-    list-style: none; /* Премахва точки от списъка */
-    padding: 0; /* Премахва отстъпи отляво */
-    text-align: center; /* Центрира навигацията */
+    list-style: none;
+    padding: 0;
+    text-align: center;
 }
 
 nav ul li {
-    display: inline; /* Показва елементите в ред */
-    margin: 0 15px; /* Отстъп между елементите */
+    display: inline;
+    margin: 0 15px;
 }
 
 nav a {
-    color: white; /* Бял цвят на линковете */
-    text-decoration: none; /* Премахва подчертаването на линковете */
-}
-
-main {
-    padding: 20px; /* Отстъп в основната част */
+    color: white;
+    text-decoration: none;
 }
 
 footer {
-    text-align: center; /* Центрира текста в футъра */
-    padding: 10px 0; /* Отстъп отгоре и отдолу */
-    background-color: #f1f1f1; /* Светъл фон за футъра */
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f1f1f1;
 }
