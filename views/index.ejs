@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles/reset.css">
-    <link rel="stylesheet" href="/styles/styles.css">
+    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
     <title>TripChaser</title>
-</head>
-<body>
-    <div class="image-container">
-        <img src="/images/Сиди_Бу_Саид.jpg" alt="Сиди_Бу_Саид">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="image-container">
+        <img src="/images/Сиди_Бу_Саид1.jpg" alt="Сиди_Бу_Саид" />
+      </div>
+      <%- include('partials/header') %>
+      <main>
+        <%- include('partials/article') %>
+      </main>
+      <%- include('partials/footer') %>
     </div>
-    <%- include('partials/header') %>
-    <main>
-        <article>
-            <h2>Заглавие на статия 1</h2>
-            <p>Текст на статия 1...</p>
-        </article>
-        <article>
-            <h2>Заглавие на статия 2</h2>
-            <p>Текст на статия 2...</p>
-        </article>
-    </main>
-    <%- include('partials/footer') %>
-</body>
+  </body>
+
 </html>
