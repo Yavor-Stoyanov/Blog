@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-    
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,15 +10,20 @@
 
   <body>
     <div class="container">
-      <div class="image-container">
-        <img src="/images/Сиди_Бу_Саид1.jpg" alt="Сиди_Бу_Саид" />
+      <div id="main-image-container">
+        <img id="main-img" src="/images/Sidi_Bu_Said.jpg" alt="Sidi Bu Said" />
       </div>
-      <%- include('partials/header') %>
-      <main>
-        <%- include('partials/article') %>
-      </main>
-      <%- include('partials/footer') %>
-    </div>
-  </body>
 
+      <%- include('partials/header') %>
+
+      <div class="content">
+        <%- include('partials/main') %>
+
+        <%- include('partials/aside') %>
+      </div>
+
+      <%- include('partials/footer') %>
+
+      </div>
+  </body>
 </html>
