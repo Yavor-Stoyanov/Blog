@@ -28,11 +28,12 @@ header {
 
 main {
   flex: 3;
-  padding: 20px;
+  padding: 40px;
 }
 
 aside {
   flex: 1;
+  padding: 40px;
 }
 
 footer {
@@ -69,6 +70,15 @@ nav a {
   text-decoration: none;
 }
 
-#article-container {
-  width: 30%;
+.article-container {
+  display: flex;
+  width: 100%;
+}
+
+.article-photo {
+  max-width: 400px;
+}
+
+.article-info-container {
+
 }
