@@ -1,5 +1,7 @@
 html {
   background-image: url(../images/bgimage.png);
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 body {
@@ -77,8 +79,4 @@ nav a {
 
 .article-photo {
   max-width: 400px;
-}
-
-.article-info-container {
-
 }
