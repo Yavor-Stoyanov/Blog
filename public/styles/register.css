@@ -1,0 +1,29 @@
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 2rem 4rem 2rem;
+    background-color: whitesmoke;
+}
+
+fieldset {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    text-align: center;
+}
+
+button {
+    margin: 1rem;
+    padding: 0.5rem 1rem;
+}
