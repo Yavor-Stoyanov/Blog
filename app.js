@@ -7,7 +7,13 @@ app.use(express.static('public'));
 
 app.get('/', (req, res, next) => {
     try {
-        res.render('index.ejs');
+        res.render('index.ejs', {
+            headerLinks: [
+                { text: 'Login', url: '/login' },
+                { text: 'Register', url: '/register' },
+                { text: 'Contact', url: '/contact' }
+            ]
+        });
     } catch (error) {
         next(error);
     }
@@ -15,7 +21,12 @@ app.get('/', (req, res, next) => {
 
 app.get('/register', (req, res, next) => {
     try {
-        res.render('register.ejs');
+        res.render('register.ejs', { 
+            headerLinks: [
+                { text: 'Home', url: '/' },
+                { text: 'Login', url: '/login' }
+            ]
+         });
     } catch (error) {
         next(error);
     }

@@ -1,10 +1,9 @@
 <header>
     <nav>
         <ul>
-            <li><a href="#home">Начало</a></li>
-            <li><a href="#articles">Статии</a></li>
-            <li><a href="#about">За нас</a></li>
-            <li><a href="#contact">Контакт</a></li>
+            <% headerLinks.forEach(link => { %>
+                <li><a href="<%= link.url %>"><%= link.text %></a></li>
+            <% }); %>
         </ul>
     </nav>
 </header>
