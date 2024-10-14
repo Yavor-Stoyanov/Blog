@@ -13,6 +13,14 @@ app.get('/', (req, res, next) => {
     }
 });
 
+app.get('/register', (req, res, next) => {
+    try {
+        res.render('register.ejs');
+    } catch (error) {
+        next(error);
+    }
+});
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
 
