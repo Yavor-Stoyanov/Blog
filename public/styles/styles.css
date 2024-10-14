@@ -1,4 +1,5 @@
 html {
+  min-height: 100%;
   background-image: url(../images/bgimage.png);
   background-size: cover;
   background-repeat: no-repeat;
@@ -8,75 +9,5 @@ body {
   font-family: Arial, sans-serif;
   height: 100%;
   margin: 0 3rem;
-  background-color: whitesmoke;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content {
-  flex-grow: 1;
-  display: flex;
-}
-
-header {
-  background-color: #333;
-  color: white;
-  padding: 10px 0;
-}
-
-main {
-  flex: 3;
-  padding: 40px;
-}
-
-aside {
-  flex: 1;
-  padding: 40px;
-}
-
-footer {
-  text-align: left;
-  padding: 10px 0 10px 15px;
-  background-color: #f1f1f1;
-}
-
-#main-image-container {
-  width: 100%;
-  height: 40vh;
-  overflow: hidden;
-}
-
-#main-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-nav ul {
-  list-style: none;
-  padding: 0;
-  text-align: center;
-}
-
-nav ul li {
-  display: inline;
-  margin: 0 15px;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-}
-
-.article-container {
-  display: flex;
-  width: 100%;
-}
-
-.article-photo {
-  max-width: 400px;
+  padding: 0 1rem;
 }
