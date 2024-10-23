@@ -1,5 +1,6 @@
 import express from "express";
 import axios from "axios";
+import bodyParser from "body-parser";
 
 const app = express();
 const PORT = 3000;
@@ -7,6 +8,7 @@ let cachedWeather;
 let lastFetchTime;
 
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 async function fetchWeather() {
     const currentTime = new Date().getTime();
@@ -26,6 +28,7 @@ async function fetchWeather() {
 
 app.get('/', async (req, res) => {
     const weather = await fetchWeather();
+
     res.locals.weather = weather;
 
     res.render('index.ejs', {
