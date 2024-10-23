@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/styles/header.css" />
     <link rel="stylesheet" href="/styles/register.css" />
     <link rel="stylesheet" href="/styles/footer.css" />
+    <script defer src="js/register.js"></script>
   </head>
 
   <body>
@@ -17,6 +18,8 @@
       <form action="/register" method="post">
         <fieldset>
           <legend>Pleace sign in</legend>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required />
           <label for="email">Email</label>
           <input type="email" id="email" name="email" required />
           <label for="password">Password</label>
