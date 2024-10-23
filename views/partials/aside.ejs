@@ -1,5 +1,15 @@
 <aside>
-    <h2>Welcome to Trip Chaser ✈</h2>
-    <p>If you're new, <a href="/register">register</a></p>
-    <p>If you have an account, <a href="/login">login</a></p>
+  <h2>Welcome to Trip Chaser ✈</h2>
+  <p>If you're new, <a href="/register">register</a></p>
+  <p>If you have an account, <a href="/login">login</a></p>
+
+  <% if (locals.weather) { %>
+    <div class="weather-widget">
+      <div class="weather-content">
+        <h2 class="city-name"><%= weather.name %></h2>
+        <p class="temperature"> <%= Math.round(weather.main.temp) %>°C</p>
+        <img src="https://openweathermap.org/img/wn/<%= weather.weather[0].icon %>.png" alt="Изображение на времето" class="weather-icon" />
+      </div>
+    </div>
+  <% } %>
 </aside>
