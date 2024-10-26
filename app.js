@@ -1,9 +1,20 @@
 import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
+import bcrypt from 'bcrypt';
+import pg from 'pg';
 
 const app = express();
 const PORT = 3000;
+
+const db = new pg.Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'blog',
+    password: 'k7F^Bj83a#cDs@iA5L',
+    port: 5432
+});
+
 let cachedWeather;
 let lastFetchTime;
 
