@@ -7,7 +7,7 @@ import pg from 'pg';
 const app = express();
 const PORT = 3000;
 
-const db = new pg.Client({
+const db = new pg.Pool({
     user: 'postgres',
     host: 'localhost',
     database: 'blog',
@@ -51,14 +51,20 @@ app.get('/', async (req, res) => {
     });
 });
 
-app.get('/register', (req, res, next) => {
+app.get('/register', (req, res) => {
+    res.render('register.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Login', url: '/login' }
+        ]
+    });
+});
+
+app.post('/register', (req, res, next) => {
+    const { username, email, password, repeatPassword } = req.body;
     try {
-        res.render('register.ejs', {
-            headerLinks: [
-                { text: 'Home', url: '/' },
-                { text: 'Login', url: '/login' }
-            ]
-        });
+        db.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, password]);
+        res.redirect('/');
     } catch (error) {
         next(error);
     }
