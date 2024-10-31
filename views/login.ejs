@@ -15,16 +15,12 @@
   <body>
     <%- include('partials/header') %>
     <main>
-      <form action="/register" method="post">
+      <form action="/login" method="post">
         <fieldset>
-          <label for="username">Username <span class="asterisk">*</span></label>
-          <input type="text" id="username" name="username" autocomplete="off" autofocus required />
-          <label for="email">Email <span class="asterisk">*</span></label>
+          <label for="email">Email</label>
           <input type="email" id="email" name="email" autocomplete="email" required />
-          <label for="password">Password <span class="asterisk">*</span></label>
-          <input type="password" id="password" name="password" autocomplete="new-password" required />
-          <label for="repeatPassword">Repeat password <span class="asterisk">*</span></label>
-          <input type="password" id="repeatPassword" name="repeatPassword" autocomplete="new-password" required />
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required />
           <button type="submit">Submit</button>
         </fieldset>
       </form>

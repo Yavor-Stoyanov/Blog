@@ -60,6 +60,15 @@ app.get('/register', (req, res) => {
     });
 });
 
+app.get('/login', (req, res) => {
+    res.render('login.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Register', url: '/register' }
+        ]
+    });
+});
+
 app.post('/register', (req, res, next) => {
     const { username, email, password, repeatPassword } = req.body;
     try {
@@ -69,6 +78,7 @@ app.post('/register', (req, res, next) => {
         next(error);
     }
 });
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
