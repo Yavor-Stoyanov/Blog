@@ -1,7 +1,12 @@
 <aside>
-  <h2>Welcome to Trip Chaser ✈</h2>
-  <p>If you're new, <a href="/register">register</a></p>
-  <p>If you have an account, <a href="/login">login</a></p>
+  <div class="welcome-container"> 
+    <h2 id="welcome-message">Welcome to Trip Chaser ✈</h2>
+
+    <div class="button-container">
+      <a href="/register" class="button">Register</a>
+      <a href="/login" class="button">Login</a>
+    </div>
+  </div>
 
   <% if (locals.weather) { %>
     <div class="weather-widget">

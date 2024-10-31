@@ -1,0 +1,22 @@
+.button-container {
+    display: flex;
+    justify-content:space-around;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.button {
+    padding: 1rem 2rem;
+    text-decoration: none;
+    background-color: whitesmoke;
+    color: #333;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: background-color 0.5s;
+}
+
+.button:hover {
+    background-color: #333;
+    color: #0fe219;
+  }

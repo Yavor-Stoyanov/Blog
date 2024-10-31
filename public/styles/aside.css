@@ -28,3 +28,16 @@
 .weather-icon {
     width: 40px;
 }
+
+.welcome-container {
+    margin-bottom: 5rem;
+    background-color: #333;
+    border-radius: 8px;
+    padding: 1rem 2rem 3rem 2rem;
+}
+
+#welcome-message {
+    font-size: 3rem;
+    color: #0fe219;
+    text-align: center;
+}

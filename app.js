@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import pg from 'pg';
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 
 const db = new pg.Pool({
     user: 'postgres',
