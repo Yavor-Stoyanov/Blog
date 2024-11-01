@@ -21,13 +21,25 @@ fieldset {
     flex-direction: column;
     width: 50%;
     text-align: center;
+    align-items: center;
 }
 
 button {
     margin: 1rem;
     padding: 0.5rem 1rem;
+    border-radius: 4px;
 }
 
 .asterisk {
     color: red;
+}
+
+.tooltip {
+    background-color: #d62338;
+    color: whitesmoke;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-top: 4px;
 }

@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import pg from 'pg';
 
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 
 const db = new pg.Pool({
     user: 'postgres',
@@ -69,16 +69,60 @@ app.get('/login', (req, res) => {
     });
 });
 
-app.post('/register', (req, res, next) => {
+app.post('/register', async (req, res, next) => {
     const { username, email, password, repeatPassword } = req.body;
+
     try {
-        db.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, password]);
-        res.redirect('/');
+        const result = await db.query('SELECT email FROM users WHERE email = $1', [email]);
+
+        if (result.rows.length == 0) {
+            if (password !== repeatPassword) {
+                return res.render('register.ejs', {
+                    headerLinks: [
+                        { text: 'Home', url: '/' },
+                        { text: 'Login', url: '/login' }
+                    ],
+                    error: 'Passwords don\'t match.'
+                })
+            }
+
+            //create logic to send mail to ensure it's real
+            db.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, password]);
+            res.redirect('/');
+        } else {
+            // login as alternative
+            return res.render('register.ejs', {
+                headerLinks: [
+                    { text: 'Home', url: '/' },
+                    { text: 'Login', url: '/login' }
+                ],
+                error: 'Email already exists.'
+            })
+        }
     } catch (error) {
         next(error);
     }
 });
 
+app.post('/login', async (req, res, next) => {
+    const { email, password } = req.body;
+
+    try {
+        const result = await db.query('SELECT email, password FROM users WHERE email = $1', [email]);
+
+        if (result.rows.length > 0) {
+            if (result.rows[0].password === password) {
+                res.redirect('/');
+            } else {
+                // logic for wrong password
+            }
+        } else {
+            // logic for non existent user
+        }
+    } catch (error) {
+        next(error);
+    }
+});
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
