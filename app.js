@@ -6,6 +6,7 @@ import pg from 'pg';
 
 const app = express();
 const PORT = 3000;
+const saltRounds = 12;
 
 const db = new pg.Pool({
     user: 'postgres',
@@ -87,8 +88,15 @@ app.post('/register', async (req, res, next) => {
             }
 
             //create logic to send mail to ensure it's real
-            db.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, password]);
-            res.redirect('/');
+            bcrypt.hash(password, saltRounds, async (err, hash) => {
+                if (err) {
+                    //err logic
+                } else {
+                    await db.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)',
+                    [username, email, hash]);
+                    res.redirect('/');
+                }
+            });
         } else {
             // login as alternative
             return res.render('register.ejs', {
