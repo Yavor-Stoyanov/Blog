@@ -3,10 +3,14 @@ import axios from "axios";
 import bodyParser from "body-parser";
 import bcrypt from 'bcrypt';
 import pg from 'pg';
+import session from "express-session";
+import passport from "passport";
 
 const app = express();
 const PORT = 3000;
 const saltRounds = 12;
+let cachedWeather;
+let lastFetchTime;
 
 const db = new pg.Pool({
     user: 'postgres',
@@ -16,11 +20,16 @@ const db = new pg.Pool({
     port: 5432
 });
 
-let cachedWeather;
-let lastFetchTime;
-
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'useEncryptedValueFrom.envFile',
+    resave: false, // option is to save the session to the database,
+    saveUninitialized: true
+}));
+// passport is after session
+app.use(passport.initialize());
+app.use(passport.session());
 
 async function fetchWeather() {
     const currentTime = new Date().getTime();
@@ -70,6 +79,16 @@ app.get('/login', (req, res) => {
     });
 });
 
+app.get('/profile', (req, res) => {
+    res.render('profile.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Add article', url: '/add' },
+            { text: 'Logout', url: '/logout' }
+        ]
+    });
+});
+
 app.post('/register', async (req, res, next) => {
     const { username, email, password, repeatPassword } = req.body;
 
@@ -94,7 +113,7 @@ app.post('/register', async (req, res, next) => {
                 } else {
                     await db.query('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)',
                         [username, email, hash]);
-                    res.redirect('/');
+                    res.redirect('/profile');
                 }
             });
         } else {
@@ -128,7 +147,7 @@ app.post('/login', async (req, res, next) => {
                     //error comparing passwords
                 } else {
                     if (result) {
-                        res.redirect('/');
+                        res.redirect('/profile');
                     } else {
                         // inform for incorrect password
                     }
