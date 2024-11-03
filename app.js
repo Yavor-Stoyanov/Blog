@@ -92,8 +92,8 @@ app.post('/register', async (req, res, next) => {
                 if (err) {
                     //err logic
                 } else {
-                    await db.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)',
-                    [username, email, hash]);
+                    await db.query('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)',
+                        [username, email, hash]);
                     res.redirect('/');
                 }
             });
@@ -113,17 +113,27 @@ app.post('/register', async (req, res, next) => {
 });
 
 app.post('/login', async (req, res, next) => {
-    const { email, password } = req.body;
+    const loginPass = req.body.password;
+    const loginEmail = req.body.email;
 
     try {
-        const result = await db.query('SELECT email, password FROM users WHERE email = $1', [email]);
+        const result = await db.query('SELECT email, password_hash FROM users WHERE email = $1', [loginEmail]);
 
         if (result.rows.length > 0) {
-            if (result.rows[0].password === password) {
-                res.redirect('/');
-            } else {
-                // logic for wrong password
-            }
+            const user = result.rows[0];
+            const storedHashedPass = user.password_hash;
+
+            bcrypt.compare(loginPass, storedHashedPass, (err, result) => {
+                if (err) {
+                    //error comparing passwords
+                } else {
+                    if (result) {
+                        res.redirect('/');
+                    } else {
+                        // inform for incorrect password
+                    }
+                }
+            });
         } else {
             // logic for non existent user
         }
