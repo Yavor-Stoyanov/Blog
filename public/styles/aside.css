@@ -1,3 +1,8 @@
+aside {
+    flex: 1;
+    padding: 40px;
+  }
+
 .weather-widget {
     margin-top: 2rem;
     background-color: #333;

@@ -10,25 +10,21 @@
     <link rel="stylesheet" href="/styles/footer.css" />
     <link rel="stylesheet" href="/styles/aside.css" />
     <link rel="stylesheet" href="/styles/button.css" />
+    <link rel="stylesheet" href="/styles/index.css" />
     <title>TripChaser</title>
   </head>
 
   <body>
-    <div class="container">
-      <div id="main-image-container">
-        <img id="main-img" src="/images/Sidi_Bu_Said.jpg" alt="Sidi Bu Said" />
-      </div>
+    <div id="main-image-container">
+      <img id="main-img" src="/images/Sidi_Bu_Said.jpg" alt="Sidi Bu Said" />
+    </div>
 
-      <%- include('partials/header') %>
+    <%- include('partials/header') %>
 
-      <div class="content">
-        <%- include('partials/main') %>
+    <div class="base-content">
+      <%- include('partials/main') %> <%- include('partials/aside') %>
+    </div>
 
-        <%- include('partials/aside') %>
-      </div>
-
-      <%- include('partials/footer') %>
-
-      </div>
+    <%- include('partials/footer') %>
   </body>
 </html>
