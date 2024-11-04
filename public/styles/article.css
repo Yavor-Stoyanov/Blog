@@ -1,0 +1,19 @@
+.article-container {
+    height: 100%;
+    background-color: whitesmoke;
+    padding: 10px;
+}
+
+.article-title {
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    text-align: center;
+    font-size: 2rem;
+    text-transform: uppercase;
+}
+
+.article-text {
+    padding: 30px;
+
+}

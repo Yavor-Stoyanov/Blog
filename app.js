@@ -89,6 +89,16 @@ app.get('/profile', (req, res) => {
     });
 });
 
+app.get('/article', (req, res) => {
+    res.render('article.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Add article', url: '/add' },
+            { text: 'Logout', url: '/logout' }
+        ]
+    });
+})
+
 app.post('/register', async (req, res, next) => {
     const { username, email, password, repeatPassword } = req.body;
 
