@@ -16,11 +16,16 @@
     <main>
       <form action="/login" method="post">
         <fieldset>
+          <legend>LOGIN</legend>
           <label for="email">Email</label>
           <input type="email" id="email" name="email" autocomplete="email" required />
           <label for="password">Password</label>
           <input type="password" id="password" name="password" autocomplete="current-password" required />
-          <button type="submit">Submit</button>
+          <button type="submit" class="submitBtn">Submit</button>
+          <a href="/register" class="regLogBtn">REGISTER</a>
+          <% if (locals.error) { %>
+            <span class="tooltip" style="display: block;"><%= error %></span>
+          <% } %>
         </fieldset>
       </form>
     </main>

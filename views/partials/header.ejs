@@ -1,9 +1,19 @@
 <header>
     <nav>
         <ul>
-            <% headerLinks.forEach(link => { %>
-                <li><a href="<%= link.url %>"><%= link.text %></a></li>
-            <% }); %>
+                <%# if (user) { %>
+                    <!-- <p>Welcome, <%#= user.username %>!</p> -->
+                    <!-- <a href="/logout">Logout</a> -->
+                <%# } else { %>
+                    <!-- <a href="/login">Login</a> -->
+                    <!-- <a href="/register">Register</a> -->
+                <%# } %>
+            
+                <% if (locals.headerLinks) { %>
+                    <% headerLinks.forEach(link => { %>
+                        <li><a href="<%= link.url %>"><%= link.text %></a></li>
+                    <% }); %>
+                <% } %>
         </ul>
     </nav>
 </header>

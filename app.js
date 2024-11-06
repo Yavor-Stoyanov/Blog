@@ -1,4 +1,4 @@
-import express from "express";
+import express, { text } from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
 import bcrypt from 'bcrypt';
@@ -35,6 +35,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+    if (req.isAuthenticated() || req.path === '/login' || req.path === '/register') {
+    res.locals.user = req.isAuthenticated() ? req.user : null;
+    return next();
+    }
+    res.redirect('/login');
+});
+
 async function fetchWeather() {
     const currentTime = new Date().getTime();
     if (!lastFetchTime || currentTime - lastFetchTime > 60 * 60 * 1000) {
@@ -70,21 +78,11 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('register.ejs', {
-        headerLinks: [
-            { text: 'Home', url: '/' },
-            { text: 'Login', url: '/login' }
-        ]
-    });
+    res.render('register.ejs');
 });
 
 app.get('/login', (req, res) => {
-    res.render('login.ejs', {
-        headerLinks: [
-            { text: 'Home', url: '/' },
-            { text: 'Register', url: '/register' }
-        ]
-    });
+    res.render('login.ejs');
 });
 
 app.get('/profile', (req, res) => {

@@ -16,6 +16,7 @@
     <main>
       <form action="/register" method="post">
         <fieldset>
+          <legend>REGISTER</legend>
           <label for="username">Username <span class="asterisk">*</span></label>
           <input type="text" id="username" name="username" autocomplete="off" autofocus required />
           <label for="email">Email <span class="asterisk">*</span></label>
@@ -24,7 +25,8 @@
           <input type="password" id="password" name="password" autocomplete="new-password" required />
           <label for="repeatPassword">Repeat password <span class="asterisk">*</span></label>
           <input type="password" id="repeatPassword" name="repeatPassword" autocomplete="new-password" required />
-          <button type="submit">Submit</button>
+          <button type="submit" class="submitBtn">Submit</button>
+          <a href="/login" class="regLogBtn">LOGIN</a>
           <% if (locals.error) { %>
             <span class="tooltip" style="display: block;"><%= error %></span>
           <% } %>
