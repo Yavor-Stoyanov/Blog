@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import pg from 'pg';
 import session from "express-session";
 import passport from "passport";
+import { Strategy } from "passport-local";
 
 const app = express();
 const PORT = 3000;
@@ -24,8 +25,11 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     secret: 'useEncryptedValueFrom.envFile',
-    resave: false, // option is to save the session to the database,
-    saveUninitialized: true
+    resave: false, // option is to save the session to the database
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60000
+    }
 }));
 // passport is after session
 app.use(passport.initialize());
@@ -52,13 +56,17 @@ app.get('/', async (req, res) => {
 
     res.locals.weather = weather;
 
-    res.render('index.ejs', {
-        headerLinks: [
-            { text: 'Login', url: '/login' },
-            { text: 'Register', url: '/register' },
-            { text: 'Contact', url: '/contact' }
-        ]
-    });
+    if (req.isAuthenticated()) {
+        res.render('index.ejs', {
+            headerLinks: [
+                { text: 'Login', url: '/login' },
+                { text: 'Register', url: '/register' },
+                { text: 'Contact', url: '/contact' }
+            ]
+        });
+    } else {
+        res.redirect('/login');
+    }
 });
 
 app.get('/register', (req, res) => {
@@ -80,23 +88,35 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-    res.render('profile.ejs', {
-        headerLinks: [
-            { text: 'Home', url: '/' },
-            { text: 'Add article', url: '/add' },
-            { text: 'Logout', url: '/logout' }
-        ]
-    });
+    console.log(req.user);
+
+    if (req.isAuthenticated()) {
+        res.render('profile.ejs', {
+            headerLinks: [
+                { text: 'Home', url: '/' },
+                { text: 'Add post', url: '/add' },
+                { text: 'Logout', url: '/logout' }
+            ]
+        });
+    } else {
+        console.log('ne minava test za avtentikaciq v get profile route');
+        res.redirect('/login');
+    }
 });
 
-app.get('/article', (req, res) => {
-    res.render('article.ejs', {
-        headerLinks: [
-            { text: 'Home', url: '/' },
-            { text: 'Add article', url: '/add' },
-            { text: 'Logout', url: '/logout' }
-        ]
-    });
+app.get('/post', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.render('post.ejs', {
+            headerLinks: [
+                { text: 'Home', url: '/' },
+                { text: 'Add post', url: '/add' },
+                { text: 'Logout', url: '/logout' }
+            ]
+        });
+
+    } else {
+
+    }
 })
 
 app.post('/register', async (req, res, next) => {
@@ -119,11 +139,17 @@ app.post('/register', async (req, res, next) => {
             //create logic to send mail to ensure it's real
             bcrypt.hash(password, saltRounds, async (err, hash) => {
                 if (err) {
-                    //err logic
+                    console.error('Error hashing password', err);
                 } else {
-                    await db.query('INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)',
-                        [username, email, hash]);
-                    res.redirect('/profile');
+                    const result = await db.query(
+                        'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *',
+                        [username, email, hash]
+                    );
+                    const user = result.rows[0];
+                    req.login(user, (err) => {
+                        console.error(err);
+                        res.redirect('/profile');
+                    });
                 }
             });
         } else {
@@ -141,35 +167,10 @@ app.post('/register', async (req, res, next) => {
     }
 });
 
-app.post('/login', async (req, res, next) => {
-    const loginPass = req.body.password;
-    const loginEmail = req.body.email;
-
-    try {
-        const result = await db.query('SELECT email, password_hash FROM users WHERE email = $1', [loginEmail]);
-
-        if (result.rows.length > 0) {
-            const user = result.rows[0];
-            const storedHashedPass = user.password_hash;
-
-            bcrypt.compare(loginPass, storedHashedPass, (err, result) => {
-                if (err) {
-                    //error comparing passwords
-                } else {
-                    if (result) {
-                        res.redirect('/profile');
-                    } else {
-                        // inform for incorrect password
-                    }
-                }
-            });
-        } else {
-            // logic for non existent user
-        }
-    } catch (error) {
-        next(error);
-    }
-});
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/profile',
+    failureRedirect: '/login'
+}));
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -182,6 +183,41 @@ app.use((err, req, res, next) => {
     //res.render('error.ejs', {
     //     message: err.message || 'Internal Server Error'
     // });
+});
+
+passport.use(new Strategy(async function verify(email, password, cb) {
+    try {
+        const dbResult = await db.query('SELECT password_hash FROM users WHERE email = $1', [email]);
+
+        if (dbResult.rows.length > 0) {
+            const user = dbResult.rows[0];
+            const storedHashedPass = user.password_hash;
+
+            bcrypt.compare(password, storedHashedPass, (err, result) => {
+                if (err) {
+                    return cb(err);
+                } else {
+                    if (result) {
+                        return cb(null, user);
+                    } else {
+                        return cb(null, false);
+                    }
+                }
+            });
+        } else {
+            return cb('User not found');
+        }
+    } catch (error) {
+        return cb(error);
+    }
+}));
+
+passport.serializeUser((user, cb) => {
+    cb(null, user);
+});
+
+passport.deserializeUser((user, cb) => {
+    cb(null, user);
 });
 
 app.listen(PORT, () => {

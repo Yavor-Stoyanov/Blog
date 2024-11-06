@@ -1,10 +1,10 @@
-.article-container {
+.post-container {
     height: 100%;
     background-color: whitesmoke;
     padding: 10px;
 }
 
-.article-title {
+.post-title {
     padding: 10px;
     margin-top: 20px;
     margin-bottom: 50px;
@@ -13,7 +13,7 @@
     text-transform: uppercase;
 }
 
-.article-text {
+.post-text {
     padding: 30px;
 
 }
