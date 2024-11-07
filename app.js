@@ -173,7 +173,6 @@ app.use((err, req, res, next) => {
 });
 
 passport.use(new Strategy({ usernameField: 'email' }, async function verify(email, password, cb) {
-    console.log('inside passport middleware');
     try {
         const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 

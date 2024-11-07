@@ -20,3 +20,8 @@ header {
     color: white;
     text-decoration: none;
   }
+
+  .header-links:hover {
+    color: #0fe219;
+    transition: 0.5s;
+  }
