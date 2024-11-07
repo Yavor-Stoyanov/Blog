@@ -27,9 +27,7 @@ app.use(session({
     secret: 'useEncryptedValueFrom.envFile',
     resave: false, // option is to save the session to the database
     saveUninitialized: true,
-    cookie: {
-        maxAge: 60000
-    }
+    cookie: { maxAge: 2 * 60 * 60 * 1000 }
 }));
 // passport is after session
 app.use(passport.initialize());
@@ -60,6 +58,8 @@ async function fetchWeather() {
 }
 
 app.get('/', async (req, res) => {
+    console.log(req.session);
+
     const weather = await fetchWeather();
 
     res.locals.weather = weather;
@@ -177,7 +177,7 @@ passport.use(new Strategy({ usernameField: 'email' }, async function verify(emai
         const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
         if (result.rows.length > 0) {
-            
+
             const user = result.rows[0];
             const storedHashedPass = user.password_hash;
 
