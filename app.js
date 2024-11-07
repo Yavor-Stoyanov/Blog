@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     secret: 'useEncryptedValueFrom.envFile',
     resave: false, // option is to save the session to the database
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
         maxAge: 60000
     }
@@ -37,8 +37,8 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
     if (req.isAuthenticated() || req.path === '/login' || req.path === '/register') {
-    res.locals.user = req.isAuthenticated() ? req.user : null;
-    return next();
+        res.locals.user = req.isAuthenticated() ? req.user : null;
+        return next();
     }
     res.redirect('/login');
 });
@@ -64,17 +64,12 @@ app.get('/', async (req, res) => {
 
     res.locals.weather = weather;
 
-    if (req.isAuthenticated()) {
-        res.render('index.ejs', {
-            headerLinks: [
-                { text: 'Login', url: '/login' },
-                { text: 'Register', url: '/register' },
-                { text: 'Contact', url: '/contact' }
-            ]
-        });
-    } else {
-        res.redirect('/login');
-    }
+    res.render('index.ejs', {
+        headerLinks: [
+            { text: 'Add Post', url: '/post' },
+            { text: 'Logout', url: '/logout' }
+        ]
+    });
 });
 
 app.get('/register', (req, res) => {
@@ -88,18 +83,13 @@ app.get('/login', (req, res) => {
 app.get('/profile', (req, res) => {
     console.log(req.user);
 
-    if (req.isAuthenticated()) {
-        res.render('profile.ejs', {
-            headerLinks: [
-                { text: 'Home', url: '/' },
-                { text: 'Add post', url: '/add' },
-                { text: 'Logout', url: '/logout' }
-            ]
-        });
-    } else {
-        console.log('ne minava test za avtentikaciq v get profile route');
-        res.redirect('/login');
-    }
+    res.render('profile.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Add Post', url: '/add' },
+            { text: 'Logout', url: '/logout' }
+        ]
+    });
 });
 
 app.get('/post', (req, res) => {
@@ -107,7 +97,6 @@ app.get('/post', (req, res) => {
         res.render('post.ejs', {
             headerLinks: [
                 { text: 'Home', url: '/' },
-                { text: 'Add post', url: '/add' },
                 { text: 'Logout', url: '/logout' }
             ]
         });
@@ -145,8 +134,8 @@ app.post('/register', async (req, res, next) => {
                     );
                     const user = result.rows[0];
                     req.login(user, (err) => {
-                        console.error(err);
-                        res.redirect('/profile');
+                        if (err) { throw err; }
+                        res.redirect('/');
                     });
                 }
             });
@@ -166,7 +155,7 @@ app.post('/register', async (req, res, next) => {
 });
 
 app.post('/login', passport.authenticate('local', {
-    successRedirect: '/profile',
+    successRedirect: '/',
     failureRedirect: '/login'
 }));
 
@@ -183,12 +172,14 @@ app.use((err, req, res, next) => {
     // });
 });
 
-passport.use(new Strategy(async function verify(email, password, cb) {
+passport.use(new Strategy({ usernameField: 'email' }, async function verify(email, password, cb) {
+    console.log('inside passport middleware');
     try {
-        const dbResult = await db.query('SELECT password_hash FROM users WHERE email = $1', [email]);
+        const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
-        if (dbResult.rows.length > 0) {
-            const user = dbResult.rows[0];
+        if (result.rows.length > 0) {
+            
+            const user = result.rows[0];
             const storedHashedPass = user.password_hash;
 
             bcrypt.compare(password, storedHashedPass, (err, result) => {
