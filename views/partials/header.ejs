@@ -10,7 +10,6 @@
                 <%# } %>
             
                 <% if (locals.headerLinks) { %>
-                    <% console.log(user) %>
                     <% headerLinks.forEach(link => { %>
                         <li><a href="<%= link.url %>" class="header-links"><%= link.text %></a></li>
                     <% }); %>

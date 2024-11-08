@@ -1,35 +1,41 @@
 import express, { text } from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
-import bcrypt from 'bcrypt';
-import pg from 'pg';
+import bcrypt from "bcrypt";
+import pg from "pg";
 import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
+import env from "dotenv";
 
 const app = express();
 const PORT = 3000;
 const saltRounds = 12;
+env.config();
+
 let cachedWeather;
 let lastFetchTime;
+const apiKey = process.env.WHEATER_API;
 
 const db = new pg.Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'blog',
-    password: 'k7F^Bj83a#cDs@iA5L',
-    port: 5432
+    user: process.env.PG_USER,
+    host: process.env.PG_HOST,
+    database: process.env.PG_DATABASE,
+    password: process.env.PG_PASSWORD,
+    port: process.env.PG_PORT
 });
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'useEncryptedValueFrom.envFile',
+    secret: process.env.SESSION_SECRET,
     resave: false, // option is to save the session to the database
-    saveUninitialized: true,
-    cookie: { maxAge: 2 * 60 * 60 * 1000 }
+    saveUninitialized: false,
+    cookie: { 
+        maxAge: 12 * 60 * 60 * 1000 
+    }
 }));
-// passport is after session
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -44,7 +50,7 @@ app.use((req, res, next) => {
 async function fetchWeather() {
     const currentTime = new Date().getTime();
     if (!lastFetchTime || currentTime - lastFetchTime > 60 * 60 * 1000) {
-        const url = 'https://api.openweathermap.org/data/2.5/weather?lat=42.698334&lon=23.319941&units=metric&lang=bg&appid=54e3f85ed731175621163b6963ad1bba';
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=42.698334&lon=23.319941&units=metric&lang=bg&appid=${apiKey}`;
         try {
             const response = await axios.get(url);
             cachedWeather = response.data;
@@ -58,10 +64,7 @@ async function fetchWeather() {
 }
 
 app.get('/', async (req, res) => {
-    console.log(req.session);
-
     const weather = await fetchWeather();
-
     res.locals.weather = weather;
 
     res.render('index.ejs', {
@@ -81,8 +84,6 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-    console.log(req.user);
-
     res.render('profile.ejs', {
         headerLinks: [
             { text: 'Home', url: '/' },
