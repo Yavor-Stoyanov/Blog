@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/header.css" />
+    <link rel="stylesheet" href="/styles/footer.css" />
+    <link rel="stylesheet" href="/styles/add-post.css" />
+    <title>Trip Chaser</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="post-container">
+        <h2 class="post-title">Share your trip with us!</h2>
+        <form action="/add-post" method="post" class="post-form">
+            <button type="submit">Submit</button>
+            <input id="post-title" type="text" name="title" placeholder="Title of the post">
+            <textarea id="post-text" name="content" rows="100" wrap="soft" placeholder="Your post text..." required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <%- include('partials/footer') %>
+</body>
+</html>

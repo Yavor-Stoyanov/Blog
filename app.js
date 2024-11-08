@@ -69,7 +69,7 @@ app.get('/', async (req, res) => {
 
     res.render('index.ejs', {
         headerLinks: [
-            { text: 'Add Post', url: '/post' },
+            { text: 'Add Post', url: '/add-post' },
             { text: 'Logout', url: '/logout' }
         ]
     });
@@ -93,18 +93,13 @@ app.get('/profile', (req, res) => {
     });
 });
 
-app.get('/post', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.render('post.ejs', {
-            headerLinks: [
-                { text: 'Home', url: '/' },
-                { text: 'Logout', url: '/logout' }
-            ]
-        });
-
-    } else {
-
-    }
+app.get('/add-post', (req, res) => {
+    res.render('add-post.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Logout', url: '/logout' }
+        ]
+    });
 })
 
 app.get('/logout', (req, res) => {
@@ -175,6 +170,10 @@ app.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login'
 }));
+
+app.post('/add-post', (req, res) => {
+    res.redirect('/');
+});
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
