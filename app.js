@@ -31,8 +31,8 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false, // option is to save the session to the database
     saveUninitialized: false,
-    cookie: { 
-        maxAge: 12 * 60 * 60 * 1000 
+    cookie: {
+        maxAge: 12 * 60 * 60 * 1000
     }
 }));
 
@@ -106,6 +106,22 @@ app.get('/post', (req, res) => {
 
     }
 })
+
+app.get('/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return res.status(500).send("Грешка при излизане.");
+        }
+
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).send("Грешка при изтриване на сесията.");
+            }
+            res.clearCookie("connect.sid");
+            res.redirect("/login");
+        });
+    });
+});
 
 app.post('/register', async (req, res, next) => {
     const { username, email, password, repeatPassword } = req.body;
