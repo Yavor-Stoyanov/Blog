@@ -41,7 +41,7 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
     if (req.isAuthenticated() || req.path === '/login' || req.path === '/register') {
-        res.locals.user = req.isAuthenticated() ? req.user : null;
+        res.locals.user = req.user;
         return next();
     }
     res.redirect('/login');
@@ -180,7 +180,18 @@ app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login'
 }));
 
-app.post('/add-post', (req, res) => {
+app.post('/add-post', async (req, res, next) => {
+    const title = req.body.title;
+    const content = req.body.content;
+    const userId = req.user.id;
+
+    try {
+        const result = await db.query(
+            'INSERT INTO posts (title, content, user_id) VALUES ($1, $2, $3)',
+        [title, content, userId]);
+    } catch (error) {
+        next(error);
+    }
     res.redirect('/');
 });
 
