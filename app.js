@@ -100,7 +100,16 @@ app.get('/add-post', (req, res) => {
             { text: 'Logout', url: '/logout' }
         ]
     });
-})
+});
+
+app.get('/view-post', (req, res) => {
+    res.render('view-post.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Logout', url: '/logout' }
+        ]
+    });
+});
 
 app.get('/logout', (req, res) => {
     req.logout((err) => {
