@@ -1,102 +1,13 @@
 <main>
-  <div class="article-container">
-    <img class="article-photo" src="images/Rila.jpg" alt="Изглед към Рила откъм Разлог" />
-    <div class="article-info-container">
-      <h2>Заглавие на статия</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-      </p>
-    </div>
-  </div>
-  <a href="/view-post" class="read-more">Continue reading...</a>
-
-  <div class="article-container">
-    <img class="article-photo" src="images/Rila.jpg" alt="Изглед към Рила откъм Разлог" />
-    <div class="article-info-container">
-      <h2>Заглавие на статия</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-      </p>
-    </div>
-  </div>
-  <a href="/view-post" class="read-more">Continue reading...</a>
   
-  <div class="article-container">
-    <img class="article-photo" src="images/Rila.jpg" alt="Изглед към Рила откъм Разлог" />
-    <div class="article-info-container">
-      <h2>Заглавие на статия</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-      </p>
+  <% locals.posts.forEach(post => { %>
+    <div class="article-container">
+      <img class="article-photo" src="images/Rila.jpg" alt="Изглед към Рила откъм Разлог" />
+      <div class="article-info-container">
+        <h2><%= post.title %></h2>
+        <p><%= post.content %></p>
+      </div>
     </div>
-  </div>
-  <a href="/view-post" class="read-more">Continue reading...</a>
-  
-  <div class="article-container">
-    <img class="article-photo" src="images/Rila.jpg" alt="Изглед към Рила откъм Разлог" />
-    <div class="article-info-container">
-      <h2>Заглавие на статия</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-      </p>
-    </div>
-  </div>
-  <a href="/view-post" onclick="event.preventDefault()" class="read-more">Continue reading...</a>
-  
-  <div class="article-container">
-    <img class="article-photo" src="images/Rila.jpg" alt="Изглед към Рила откъм Разлог" />
-
-    <div class="article-info-container">
-      <h2>Заглавие на статия</h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel nisi
-        dignissim elit dignissim tincidunt. Donec tincidunt semper nisl, quis
-        commodo nisl tincidunt id. Phasellus ultrices euismod hendrerit. Nullam
-        bibendum elementum lobortis. Vestibulum ac nulla et mi tristique eleifend.
-        Pellentesque ac gravida tortor. Nunc est libero, vestibulum eget ex sed.
-      </p>
-    </div>
-  </div>
-  <a href="/view-post" onclick="event.preventDefault()" class="read-more">Continue reading...</a>
+    <a href="/view-post/<%= post.id %>" class="read-more">Continue reading...</a>
+  <% }) %>
 </main>
