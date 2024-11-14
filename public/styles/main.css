@@ -12,6 +12,8 @@ main {
 
 .article-photo {
   max-width: 300px;
+  max-height: 168.75px;
+  
 }
 
 .article-info-container {

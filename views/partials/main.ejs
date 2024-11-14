@@ -2,7 +2,7 @@
   
   <% locals.posts.forEach(post => { %>
     <div class="article-container">
-      <img class="article-photo" src="images/Rila.jpg" alt="Изглед към Рила откъм Разлог" />
+      <img class="article-photo" src="<%=` /images/${post.filename}` %>" alt="Main image of the trip" />
       <div class="article-info-container">
         <h2><%= post.title %></h2>
         <p><%= post.content %></p>

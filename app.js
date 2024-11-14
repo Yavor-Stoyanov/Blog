@@ -7,7 +7,21 @@ import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import env from "dotenv";
+import multer from "multer";
+import path from 'path';
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/images/');
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const filename = `${Date.now()}${ext}`;
+        cb(null, filename);
+    }
+});
+
+const upload = multer({ storage: storage });
 const app = express();
 const PORT = 3000;
 const saltRounds = 12;
@@ -61,11 +75,12 @@ async function fetchWeather() {
         }
     }
     return cachedWeather;
-}
+};
 
 app.get('/', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM posts');
+        console.log(result.rows)
         res.locals.posts = result.rows;
         
         const weather = await fetchWeather();
@@ -189,15 +204,15 @@ app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login'
 }));
 
-app.post('/add-post', async (req, res, next) => {
-    const title = req.body.title;
-    const content = req.body.content;
+app.post('/add-post', upload.single('image'), async (req, res, next) => {
+    const { title, content } = req.body;
+    const filename = req.file.filename;
     const userId = req.user.id;
 
     try {
         const result = await db.query(
-            'INSERT INTO posts (title, content, user_id) VALUES ($1, $2, $3)',
-        [title, content, userId]);
+            'INSERT INTO posts (title, content, user_id, filename) VALUES ($1, $2, $3, $4)',
+            [title, content, userId, filename]);
     } catch (error) {
         next(error);
     }
