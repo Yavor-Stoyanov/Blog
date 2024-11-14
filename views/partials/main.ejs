@@ -1,5 +1,4 @@
 <main>
-  
   <% locals.posts.forEach(post => { %>
     <p><%= post.created_at.toLocaleDateString('en-EN', { day: 'numeric', month: 'long', year: 'numeric' }); %></p>
     <div class="article-container">
@@ -9,6 +8,7 @@
         <p><%= post.content %></p>
       </div>
     </div>
-    <a href="/view-post/<%= post.id %>" class="read-more">Continue reading...</a>
+    <a href="/view-post/<%= post.id %>" class="button">Continue reading</a>
+    <hr>
   <% }) %>
 </main>
