@@ -80,7 +80,6 @@ async function fetchWeather() {
 app.get('/', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM posts ORDER BY created_at DESC');
-        console.log(result.rows)
         res.locals.posts = result.rows;
         
         const weather = await fetchWeather();
@@ -125,14 +124,22 @@ app.get('/add-post', (req, res) => {
     });
 });
 
-app.get('/view-post/:id', (req, res) => {
+app.get('/view-post/:id', async (req, res) => {
     const postId = req.params.id;
-    res.render('view-post.ejs', {
-        headerLinks: [
-            { text: 'Home', url: '/' },
-            { text: 'Logout', url: '/logout' }
-        ]
-    });
+
+    try {
+        const result = await db.query('SELECT * FROM posts WHERE id = $1', [postId]);
+        res.locals.post = result.rows[0];
+        
+        res.render('view-post.ejs', {
+            headerLinks: [
+                { text: 'Home', url: '/' },
+                { text: 'Logout', url: '/logout' }
+            ]
+        });
+    } catch (error) {
+        
+    }
 });
 
 app.get('/logout', (req, res) => {

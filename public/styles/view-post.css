@@ -1,0 +1,27 @@
+.full-post-container {
+    background-color: whitesmoke;
+    padding: 10px;
+}
+
+.full-post-title {
+    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    text-align: center;
+    font-size: 2rem;
+    text-transform: uppercase;
+  }
+
+  img {
+    width: 100%;
+    margin-bottom: 4rem;
+  }
+
+  hr {
+    margin-bottom: 4rem;
+  }
+
+  .full-post-text {
+    font-size: 1.2rem;
+    line-height: 1.5;
+  }

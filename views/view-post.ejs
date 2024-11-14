@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/reset.css">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <link rel="stylesheet" href="/styles/view-post.css">
     <title>Trip Chaser</title>
 </head>
 <body>
-    <div>
-        <h2>View post</h2>
+    <%- include('partials/header') %>
+    <div class="full-post-container">
+        <h2 class="full-post-title"><%= post.title %></h2>
+        <img src="<%= `/images/${post.filename}` %>" alt="">
+        <hr>
+        <p class="full-post-text"><%= post.content %></p>
     </div>
+    <%- include('partials/footer') %>
 </body>
 </html>
