@@ -1,4 +1,4 @@
-import express, { text } from "express";
+import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";

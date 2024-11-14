@@ -1,6 +1,7 @@
 <main>
   
   <% locals.posts.forEach(post => { %>
+    <p><%= post.created_at.toLocaleDateString('en-EN', { day: 'numeric', month: 'long', year: 'numeric' }); %></p>
     <div class="article-container">
       <img class="article-photo" src="<%=` /images/${post.filename}` %>" alt="Main image of the trip" />
       <div class="article-info-container">
