@@ -79,7 +79,7 @@ async function fetchWeather() {
 
 app.get('/', async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM posts');
+        const result = await db.query('SELECT * FROM posts ORDER BY created_at DESC');
         console.log(result.rows)
         res.locals.posts = result.rows;
         
