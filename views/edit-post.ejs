@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/header.css" />
+    <link rel="stylesheet" href="/styles/footer.css" />
+    <link rel="stylesheet" href="/styles/add-post.css" />
+    <link rel="stylesheet" href="/styles/button.css" />
+    <title>Trip Chaser</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="post-container">
+        <h2 class="post-title">Edit trip</h2>
+        <form action="/edit-post" method="post" class="post-form" enctype="multipart/form-data">
+            <input id="post-title-input" type="text" name="title" value="<%= post.title %>" required>
+            <textarea id="post-text" name="content" rows="20" wrap="soft" required><%= post.content %></textarea>
+            <label for="image">Main image for the post</label>
+            <input type="file" id="image" name="image" accept="image/jpeg">
+            <button type="submit" class="button" id="sbmBtn">Submit</button>
+        </form>
+    </div>
+    <%- include('partials/footer') %>
+</body>
+</html>

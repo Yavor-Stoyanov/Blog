@@ -29,6 +29,7 @@ env.config();
 
 let cachedWeather;
 let lastFetchTime;
+let cache;
 const apiKey = process.env.WHEATER_API;
 
 const db = new pg.Pool({
@@ -124,6 +125,17 @@ app.get('/add-post', (req, res) => {
     });
 });
 
+app.get('/edit-post', (req, res) => {
+    res.locals.post = cache;
+
+    res.render('edit-post.ejs', {
+        headerLinks: [
+            { text: 'Home', url: '/' },
+            { text: 'Logout', url: '/logout' }
+        ]
+    });
+});
+
 app.get('/view-post/:id', async (req, res) => {
     const postId = req.params.id;
 
@@ -131,6 +143,7 @@ app.get('/view-post/:id', async (req, res) => {
         const result = await db.query('SELECT * FROM posts WHERE id = $1', [postId]);
         
         res.locals.post = result.rows[0];
+        cache = result.rows[0];
         
         res.render('view-post.ejs', {
             headerLinks: [

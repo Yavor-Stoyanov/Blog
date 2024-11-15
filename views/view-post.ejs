@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/styles/reset.css">
     <link rel="stylesheet" href="/styles/styles.css">
     <link rel="stylesheet" href="/styles/view-post.css">
+    <link rel="stylesheet" href="/styles/button.css">
     <title>Trip Chaser</title>
 </head>
 <body>
@@ -17,6 +18,12 @@
         <img src="<%= `/images/${post.filename}` %>" alt="">
         <hr>
         <p class="full-post-text"><%= post.content %></p>
+        <% if (user.id == post.user_id) { %>
+         <div class="edit-btns">
+            <a class="button" href="/edit-post">Edit</a>
+            <a class="button" href="delete-post">Delete</a>
+         </div>
+        <% } %>
     </div>
     <%- include('partials/footer') %>
 </body>
