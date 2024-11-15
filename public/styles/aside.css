@@ -48,5 +48,10 @@ aside {
 }
 
 #username-greeting {
-    color: #8761ce;
+    color: #884cf8;
+    text-transform: uppercase;
+}
+
+#brand-name {
+    font-style: italic;
 }

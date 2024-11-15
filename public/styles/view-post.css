@@ -27,3 +27,8 @@ img {
   max-width: 70ch;
   text-align: center;
 }
+
+.edit-btns {
+  display: flex;
+  gap: 0.5rem;
+}
