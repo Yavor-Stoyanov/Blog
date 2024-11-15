@@ -129,7 +129,6 @@ app.get('/view-post/:id', async (req, res) => {
 
     try {
         const result = await db.query('SELECT * FROM posts WHERE id = $1', [postId]);
-        console.log(result.rows[0].content);
         
         res.locals.post = result.rows[0];
         
