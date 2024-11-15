@@ -1,6 +1,6 @@
 <aside>
   <div class="welcome-container"> 
-    <h2 id="welcome-message">Welcome to Trip Chaser ✈</h2>
+    <h2 id="welcome-message"><span id="username-greeting"><%= user.username %></span> welcome to Trip Chaser ✈</h2>
   </div>
 
   <% if (locals.weather) { %>
@@ -8,7 +8,7 @@
       <div class="weather-content">
         <h2 class="city-name"><%= weather.name %></h2>
         <p class="temperature"> <%= Math.round(weather.main.temp) %>°C</p>
-        <img src="https://openweathermap.org/img/wn/<%= weather.weather[0].icon %>.png" alt="Изображение на времето" class="weather-icon" />
+        <img src="https://openweathermap.org/img/wn/<%= weather.weather[0].icon %>.png" alt="Weather icon" class="weather-icon" />
       </div>
     </div>
   <% } %>

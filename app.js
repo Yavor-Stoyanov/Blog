@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 async function fetchWeather() {
     const currentTime = new Date().getTime();
     if (!lastFetchTime || currentTime - lastFetchTime > 60 * 60 * 1000) {
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=42.698334&lon=23.319941&units=metric&lang=bg&appid=${apiKey}`;
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=42.698334&lon=23.319941&units=metric&lang=en&appid=${apiKey}`;
         try {
             const response = await axios.get(url);
             cachedWeather = response.data;
