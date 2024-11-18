@@ -20,7 +20,10 @@
             <textarea id="post-text" name="content" rows="20" wrap="soft" required><%= post.content %></textarea>
             <label for="image">Main image for the post</label>
             <input type="file" id="image" name="image" accept="image/jpeg">
-            <button type="submit" class="button" id="sbmBtn">Submit</button>
+            <div>
+                <button type="submit" class="button">Save</button>
+                <button type="button" onclick="history.back()" class="button">Cancel</button>
+            </div>
         </form>
     </div>
     <%- include('partials/footer') %>
