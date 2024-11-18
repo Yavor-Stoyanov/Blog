@@ -29,7 +29,6 @@ env.config();
 
 let cachedWeather;
 let lastFetchTime;
-let cache;
 const apiKey = process.env.WHEATER_API;
 
 const db = new pg.Pool({
@@ -125,15 +124,24 @@ app.get('/add-post', (req, res) => {
     });
 });
 
-app.get('/edit-post', (req, res) => {
-    res.locals.post = cache;
-
-    res.render('edit-post.ejs', {
-        headerLinks: [
-            { text: 'Home', url: '/' },
-            { text: 'Logout', url: '/logout' }
-        ]
-    });
+app.get('/edit-post/:id', async (req, res) => {
+    try {
+        const { rows } = await db.query('SELECT * FROM posts WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
+        
+        if (rows.length != 0) {
+            res.locals.post = rows[0];
+            res.render('edit-post.ejs', {
+                headerLinks: [
+                    { text: 'Home', url: '/' },
+                    { text: 'Logout', url: '/logout' }
+                ]
+            });
+        } else {
+            return res.status(403).json({ error: 'Unauthorized to edit this post' });
+        };
+    } catch (error) {
+        
+    }
 });
 
 app.get('/view-post/:id', async (req, res) => {
@@ -143,7 +151,6 @@ app.get('/view-post/:id', async (req, res) => {
         const result = await db.query('SELECT * FROM posts WHERE id = $1', [postId]);
         
         res.locals.post = result.rows[0];
-        cache = result.rows[0];
         
         res.render('view-post.ejs', {
             headerLinks: [
@@ -229,7 +236,7 @@ app.post('/add-post', upload.single('image'), async (req, res, next) => {
     const { title, content } = req.body;
     const filename = req.file.filename;
     const userId = req.user.id;
-
+    
     try {
         const result = await db.query(
             'INSERT INTO posts (title, content, user_id, filename) VALUES ($1, $2, $3, $4)',
@@ -238,6 +245,10 @@ app.post('/add-post', upload.single('image'), async (req, res, next) => {
         next(error);
     }
     res.redirect('/');
+});
+
+app.post('/edit-post', async (req, res) => {
+
 });
 
 app.use((err, req, res, next) => {

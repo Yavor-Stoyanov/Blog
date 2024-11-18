@@ -20,7 +20,7 @@
         <p class="full-post-text"><%= post.content %></p>
         <% if (user.id == post.user_id) { %>
          <div class="edit-btns">
-            <a class="button" href="/edit-post">Edit</a>
+            <a class="button" href="/edit-post/<%= post.id %>">Edit</a>
             <a class="button" href="delete-post">Delete</a>
          </div>
         <% } %>
