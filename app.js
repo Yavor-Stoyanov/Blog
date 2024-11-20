@@ -105,15 +105,15 @@ app.get('/login', (req, res) => {
     res.render('login.ejs');
 });
 
-app.get('/profile', (req, res) => {
-    res.render('profile.ejs', {
-        headerLinks: [
-            { text: 'Home', url: '/' },
-            { text: 'Add Post', url: '/add' },
-            { text: 'Logout', url: '/logout' }
-        ]
-    });
-});
+// app.get('/profile', (req, res) => {
+//     res.render('profile.ejs', {
+//         headerLinks: [
+//             { text: 'Home', url: '/' },
+//             { text: 'Add Post', url: '/add' },
+//             { text: 'Logout', url: '/logout' }
+//         ]
+//     });
+// });
 
 app.get('/add-post', (req, res) => {
     res.render('add-post.ejs', {
@@ -247,8 +247,34 @@ app.post('/add-post', upload.single('image'), async (req, res, next) => {
     res.redirect('/');
 });
 
-app.post('/edit-post', async (req, res) => {
+app.post('/edit-post/:id', upload.single('image'), async (req, res) => {
+    const postId = req.params.id;
+    const values = [req.body.title, req.body.content, postId];
+    const filename = req.file?.filename || undefined;
+    let query;
 
+    try {
+        if (filename) {
+            query = `
+                UPDATE posts 
+                SET title = $1, content = $2, filename = $4
+                WHERE id = $3
+            `;
+            values.push(filename);
+        } else {
+            query = `
+                UPDATE posts 
+                SET title = $1, content = $2
+                WHERE id = $3
+            `;
+        }
+        
+        await db.query(query, values);
+        res.redirect(`/view-post/${postId}`);
+    } catch (error) {
+        
+    }
+      
 });
 
 app.use((err, req, res, next) => {
