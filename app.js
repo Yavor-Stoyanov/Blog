@@ -249,32 +249,23 @@ app.post('/add-post', upload.single('image'), async (req, res, next) => {
 
 app.post('/edit-post/:id', upload.single('image'), async (req, res) => {
     const postId = req.params.id;
-    const values = [req.body.title, req.body.content, postId];
-    const filename = req.file?.filename || undefined;
-    let query;
+    const filename = req.file?.filename;
+    const values = filename
+        ? [req.body.title, req.body.content, filename, postId]
+        : [req.body.title, req.body.content, postId];
+        
+    const query = `
+        UPDATE posts
+        SET title = $1, content = $2${filename ? ', filename = $3' : ''}
+        WHERE id = $${filename ? 4 : 3}
+    `;
 
     try {
-        if (filename) {
-            query = `
-                UPDATE posts 
-                SET title = $1, content = $2, filename = $4
-                WHERE id = $3
-            `;
-            values.push(filename);
-        } else {
-            query = `
-                UPDATE posts 
-                SET title = $1, content = $2
-                WHERE id = $3
-            `;
-        }
-        
         await db.query(query, values);
         res.redirect(`/view-post/${postId}`);
     } catch (error) {
         
     }
-      
 });
 
 app.use((err, req, res, next) => {
