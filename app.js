@@ -124,6 +124,25 @@ app.get('/add-post', (req, res) => {
     });
 });
 
+app.get('/view-post/:id', async (req, res) => {
+    const postId = req.params.id;
+
+    try {
+        const result = await db.query('SELECT * FROM posts WHERE id = $1', [postId]);
+        
+        res.locals.post = result.rows[0];
+        
+        res.render('view-post.ejs', {
+            headerLinks: [
+                { text: 'Home', url: '/' },
+                { text: 'Logout', url: '/logout' }
+            ]
+        });
+    } catch (error) {
+        
+    }
+});
+
 app.get('/edit-post/:id', async (req, res) => {
     try {
         const { rows } = await db.query('SELECT * FROM posts WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
@@ -144,20 +163,11 @@ app.get('/edit-post/:id', async (req, res) => {
     }
 });
 
-app.get('/view-post/:id', async (req, res) => {
-    const postId = req.params.id;
+app.get('/delete-post/:id', async (req, res) => {
 
     try {
-        const result = await db.query('SELECT * FROM posts WHERE id = $1', [postId]);
-        
-        res.locals.post = result.rows[0];
-        
-        res.render('view-post.ejs', {
-            headerLinks: [
-                { text: 'Home', url: '/' },
-                { text: 'Logout', url: '/logout' }
-            ]
-        });
+        await db.query('DELETE FROM posts WHERE id = $1', [req.params.id]);
+        res.redirect('/');
     } catch (error) {
         
     }
@@ -253,7 +263,7 @@ app.post('/edit-post/:id', upload.single('image'), async (req, res) => {
     const values = filename
         ? [req.body.title, req.body.content, filename, postId]
         : [req.body.title, req.body.content, postId];
-        
+
     const query = `
         UPDATE posts
         SET title = $1, content = $2${filename ? ', filename = $3' : ''}
