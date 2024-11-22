@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/styles/header.css" />
     <link rel="stylesheet" href="/styles/user-forms.css" />
     <link rel="stylesheet" href="/styles/footer.css" />
+    <link rel="stylesheet" href="/styles/button.css" />
   </head>
 
   <body>
@@ -21,8 +22,7 @@
           <input type="email" id="email" name="email" autocomplete="email" required />
           <label for="password">Password</label>
           <input type="password" id="password" name="password" autocomplete="current-password" required />
-          <button type="submit" class="submitBtn">Submit</button>
-          <a href="/register" class="regLogBtn">REGISTER</a>
+          <button type="submit" class="button">SUBMIT</button>
           <% if (locals.error) { %>
             <span class="tooltip" style="display: block;"><%= error %></span>
           <% } %>
