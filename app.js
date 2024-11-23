@@ -9,6 +9,8 @@ import { Strategy } from "passport-local";
 import env from "dotenv";
 import multer from "multer";
 import path from 'path';
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { inexistentPage } from "./middlewares/404.js";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -77,7 +79,7 @@ async function fetchWeather() {
     return cachedWeather;
 };
 
-app.get('/', async (req, res) => {
+app.get('/', async (req, res, next) => {
     try {
         const result = await db.query('SELECT posts.*, users.username FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC');
         res.locals.posts = result.rows;
@@ -92,17 +94,24 @@ app.get('/', async (req, res) => {
             ]
         });
     } catch (error) {
-        
+        next(error);
     }
-
 });
 
 app.get('/register', (req, res) => {
-    res.render('register.ejs');
+    res.render('register.ejs', {
+        headerLinks: [
+            { text: 'Login', url: '/login' }
+        ]
+    });
 });
 
 app.get('/login', (req, res) => {
-    res.render('login.ejs');
+    res.render('login.ejs', {
+        headerLinks: [
+            { text: 'Register', url: '/register' }
+        ]
+    });
 });
 
 // app.get('/profile', (req, res) => {
@@ -124,7 +133,7 @@ app.get('/add-post', (req, res) => {
     });
 });
 
-app.get('/view-post/:id', async (req, res) => {
+app.get('/view-post/:id', async (req, res, next) => {
     const postId = req.params.id;
 
     try {
@@ -139,11 +148,11 @@ app.get('/view-post/:id', async (req, res) => {
             ]
         });
     } catch (error) {
-        
+        next(error);
     }
 });
 
-app.get('/edit-post/:id', async (req, res) => {
+app.get('/edit-post/:id', async (req, res, next) => {
     try {
         const { rows } = await db.query('SELECT * FROM posts WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
         
@@ -159,30 +168,25 @@ app.get('/edit-post/:id', async (req, res) => {
             return res.status(403).json({ error: 'Unauthorized to edit this post' });
         };
     } catch (error) {
-        
+        next(error);
     }
 });
 
-app.get('/delete-post/:id', async (req, res) => {
-
+app.get('/delete-post/:id', async (req, res, next) => {
     try {
         await db.query('DELETE FROM posts WHERE id = $1', [req.params.id]);
         res.redirect('/');
     } catch (error) {
-        
+        next(error);
     }
 });
 
-app.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            return res.status(500).send("Грешка при излизане.");
-        }
+app.get('/logout', (req, res, next) => {
+    req.logout((error) => {
+        if (error) return next(error);
 
-        req.session.destroy((err) => {
-            if (err) {
-                return res.status(500).send("Грешка при изтриване на сесията.");
-            }
+        req.session.destroy((error) => {
+            if (error) return next(error);
             res.clearCookie("connect.sid");
             res.redirect("/login");
         });
@@ -244,20 +248,21 @@ app.post('/login', passport.authenticate('local', {
 
 app.post('/add-post', upload.single('image'), async (req, res, next) => {
     const { title, content } = req.body;
-    const filename = req.file.filename;
+    const filename = req.file?.filename;
     const userId = req.user.id;
     
     try {
-        const result = await db.query(
+        await db.query(
             'INSERT INTO posts (title, content, user_id, filename) VALUES ($1, $2, $3, $4)',
-            [title, content, userId, filename]);
+            [title, content, userId, filename || 'default_image.jpg']
+        );
     } catch (error) {
         next(error);
     }
     res.redirect('/');
 });
 
-app.post('/edit-post/:id', upload.single('image'), async (req, res) => {
+app.post('/edit-post/:id', upload.single('image'), async (req, res, next) => {
     const postId = req.params.id;
     const filename = req.file?.filename;
     const values = filename
@@ -274,21 +279,8 @@ app.post('/edit-post/:id', upload.single('image'), async (req, res) => {
         await db.query(query, values);
         res.redirect(`/view-post/${postId}`);
     } catch (error) {
-        
+        next(error);
     }
-});
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-
-    res.status(err.statusCode).json({
-        success: false,
-        message: err.message
-    });
-
-    //res.render('error.ejs', {
-    //     message: err.message || 'Internal Server Error'
-    // });
 });
 
 passport.use(new Strategy({ usernameField: 'email' }, async function verify(email, password, cb) {
@@ -326,6 +318,10 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((user, cb) => {
     cb(null, user);
 });
+
+app.use(inexistentPage);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);

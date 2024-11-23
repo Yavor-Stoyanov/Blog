@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/reset.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/header.css" />
+    <link rel="stylesheet" href="/styles/footer.css" />
+    <link rel="stylesheet" href="/styles/button.css" />
+    <link rel="stylesheet" href="/styles/error.css" />
+    <title>Trip Chaser</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <main>
+        <h1>Error <%= statusCode %></h1>
+        <p><%= message %></p>
+        <a href="/">Go Back to Homepage</a>
+    </main>
+    <%- include('partials/footer') %>
+</body>
+</html>
