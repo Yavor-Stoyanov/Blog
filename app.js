@@ -35,7 +35,7 @@ let lastFetchTime;
 const apiKey = process.env.WHEATER_API;
 
 const db = new pg.Pool({
-    connectionString: PG_DATABASE_URL,
+    connectionString: DATABASE_URL,
 });
 
 app.use(express.static('public'));
