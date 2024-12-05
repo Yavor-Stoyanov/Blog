@@ -3,6 +3,7 @@ import axios from "axios";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 import pg from "pg";
+import PgSession from "connect-pg-simple";
 import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
@@ -34,21 +35,26 @@ let lastFetchTime;
 const apiKey = process.env.WHEATER_API;
 
 const db = new pg.Pool({
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PG_DATABASE,
-    password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT
+    connectionString: PG_DATABASE_URL,
 });
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const PgSessionStore = PgSession(session);
+
 app.use(session({
+    store: new PgSessionStore({
+        pool: db,
+        tableName: 'sessions'
+    }),
     secret: process.env.SESSION_SECRET,
-    resave: false, // option is to save the session to the database
+    resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 12 * 60 * 60 * 1000
+        maxAge: 12 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production'
     }
 }));
 
