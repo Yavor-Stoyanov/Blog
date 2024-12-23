@@ -291,7 +291,7 @@ app.post('/edit-post/:id', upload.single('image'), async (req, res, next) => {
 
 passport.use(new Strategy({ usernameField: 'email' }, async function verify(email, password, cb) {
     try {
-        const result = await db.query('SELECT * FROM users WHERE email = rweer@df.nbh', [email]);
+        const result = await db.query("SELECT * FROM users WHERE email = 'rweer@df.nbh'", [email]);
 
         if (result.rows.length > 0) {
 
