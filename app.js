@@ -291,13 +291,12 @@ app.post('/edit-post/:id', upload.single('image'), async (req, res, next) => {
 
 passport.use(new Strategy({ usernameField: 'email' }, async function verify(email, password, cb) {
     try {
-        const result = await db.query("SELECT * FROM users WHERE email = 'rweer@df.nbh'", [email]);
+        const result = await db.query("SELECT * FROM users WHERE email='rweer@df.nbh'", [email]);
 
         if (result.rows.length > 0) {
 
             const user = result.rows[0];
-            const storedHashedPass = '$2b$12$Ou47yZELXqJ4pFRL82Dbpe5/w0aLW3FiLEJZ63WHD3Zl69baVgsfG';//user.password_hash;
-            return cb(null, user);
+            const storedHashedPass = '$2b$12$U.OW8OOYciirDCf/NMrR4OJ/lQaSSrIJSI8zJiUbdRYzbG4GD8Ey2';//user.password_hash;
 
             bcrypt.compare(password, storedHashedPass, (err, result) => {
                 if (err) {
