@@ -258,11 +258,12 @@ app.post('/add-post', upload.single('image'), async (req, res, next) => {
     const { title, content } = req.body;
     const filename = req.file?.filename;
     const userId = req.user.id;
+    const createdAt = new Date().getDate();
     
     try {
         await db.query(
-            'INSERT INTO posts (title, content, user_id, filename) VALUES ($1, $2, $3, $4)',
-            [title, content, userId, filename || 'default_image.jpg']
+            'INSERT INTO posts (title, content, user_id, filename, created_at) VALUES ($1, $2, $3, $4, $5)',
+            [title, content, userId, filename || 'default_image.jpg', createdAt]
         );
     } catch (error) {
         next(error);
