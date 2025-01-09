@@ -38,6 +38,8 @@ const db = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
 });
 
+app.set("trust proxy", 1);
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
