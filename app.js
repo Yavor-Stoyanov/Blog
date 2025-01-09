@@ -258,7 +258,7 @@ app.post('/add-post', upload.single('image'), async (req, res, next) => {
     const { title, content } = req.body;
     const filename = req.file?.filename;
     const userId = req.user.id;
-    const createdAt = new Date().getDate();
+    const createdAt = new Date().toISOString().split('T')[0];
     
     try {
         await db.query(
