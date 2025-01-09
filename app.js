@@ -115,9 +115,6 @@ app.get('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-    const currentYear = new Date().getFullYear();
-    res.locals.currentYear = currentYear;
-    
     res.render('login.ejs', {
         headerLinks: [
             { text: 'Register', url: '/register' }
