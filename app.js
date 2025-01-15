@@ -24,7 +24,16 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Ограничение до 5 MB
+    fileFilter(req, file, cb) {
+        if (!file.mimetype.startsWith('image/')) {
+            return cb(new Error('Only image files are allowed!'));
+        }
+        cb(null, true);
+    },
+});
 const app = express();
 const PORT = 3000;
 const saltRounds = 12;
@@ -91,10 +100,10 @@ app.get('/', async (req, res, next) => {
     try {
         const result = await db.query('SELECT posts.*, users.username FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC');
         res.locals.posts = result.rows;
-        
+
         const weather = await fetchWeather();
         res.locals.weather = weather;
-    
+
         res.render('index.ejs', {
             headerLinks: [
                 { text: 'Add Post', url: '/add-post' },
@@ -146,9 +155,9 @@ app.get('/view-post/:id', async (req, res, next) => {
 
     try {
         const result = await db.query('SELECT * FROM posts WHERE id = $1', [postId]);
-        
+
         res.locals.post = result.rows[0];
-        
+
         res.render('view-post.ejs', {
             headerLinks: [
                 { text: 'Home', url: '/' },
@@ -163,7 +172,7 @@ app.get('/view-post/:id', async (req, res, next) => {
 app.get('/edit-post/:id', async (req, res, next) => {
     try {
         const { rows } = await db.query('SELECT * FROM posts WHERE id = $1 AND user_id = $2', [req.params.id, req.user.id]);
-        
+
         if (rows.length != 0) {
             res.locals.post = rows[0];
             res.render('edit-post.ejs', {
@@ -259,7 +268,7 @@ app.post('/add-post', upload.single('image'), async (req, res, next) => {
     const filename = req.file?.filename;
     const userId = req.user.id;
     const createdAt = new Date().toISOString().split('T')[0];
-    
+
     try {
         await db.query(
             'INSERT INTO posts (title, content, user_id, filename, created_at) VALUES ($1, $2, $3, $4, $5)',
@@ -334,7 +343,7 @@ app.use(errorHandler);
 
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}`);
