@@ -220,7 +220,6 @@ app.post('/register', async (req, res, next) => {
             if (password !== repeatPassword) {
                 return res.render('register.ejs', {
                     headerLinks: [
-                        { text: 'Home', url: '/' },
                         { text: 'Login', url: '/login' }
                     ],
                     error: 'Passwords don\'t match.'
@@ -247,7 +246,6 @@ app.post('/register', async (req, res, next) => {
             // login as alternative
             return res.render('register.ejs', {
                 headerLinks: [
-                    { text: 'Home', url: '/' },
                     { text: 'Login', url: '/login' }
                 ],
                 error: 'Email already exists.'
@@ -258,10 +256,33 @@ app.post('/register', async (req, res, next) => {
     }
 });
 
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-}));
+// app.post('/login', (req, res, next) => passport.authenticate('local', {
+//     successRedirect: '/',
+//     failureRedirect: '/login'
+// }));
+
+app.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            res.render('login.ejs', {
+                headerLinks: [
+                    { text: 'Register', url: '/register' }
+                ],
+                error: info.message ? info.message : 'Invalid login credentials'
+            });
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            res.redirect('/');
+        });
+    })(req, res, next);
+});
+
 
 app.post('/add-post', upload.single('image'), async (req, res, next) => {
     const { title, content } = req.body;
@@ -301,31 +322,27 @@ app.post('/edit-post/:id', upload.single('image'), async (req, res, next) => {
     }
 });
 
-passport.use(new Strategy({ usernameField: 'email' }, async function verify(email, password, cb) {
+passport.use(new Strategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
         const result = await db.query("SELECT * FROM users WHERE email=$1", [email]);
 
-        if (result.rows.length > 0) {
-
-            const user = result.rows[0];
-            const storedHashedPass = user.password_hash;
-
-            bcrypt.compare(password, storedHashedPass, (err, result) => {
-                if (err) {
-                    return cb(err);
-                } else {
-                    if (result) {
-                        return cb(null, user);
-                    } else {
-                        return cb(null, false);
-                    }
-                }
-            });
-        } else {
-            return cb('User not found');
+        if (result.rows.length === 0) {
+            return done(null, false, { message: 'User not found' });
         }
+
+        const user = result.rows[0];
+        const storedHashedPass = user.password_hash;
+
+        const isPasswordValid = await bcrypt.compare(password, storedHashedPass);
+
+        if (!isPasswordValid) {
+            return done(null, false, { message: 'Invalid password' });
+        }
+
+        return done(null, user);
+
     } catch (error) {
-        return cb(error);
+        return done(error);
     }
 }));
 
