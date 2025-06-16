@@ -267,7 +267,7 @@ app.post('/login', (req, res, next) => {
             return next(err);
         }
         if (!user) {
-            res.render('login.ejs', {
+            return res.render('login.ejs', {
                 headerLinks: [
                     { text: 'Register', url: '/register' }
                 ],
@@ -347,12 +347,22 @@ passport.use(new Strategy({ usernameField: 'email' }, async (email, password, do
 }));
 
 passport.serializeUser((user, cb) => {
-    cb(null, user);
+    cb(null, user.id);
 });
 
-passport.deserializeUser((user, cb) => {
-    cb(null, user);
+passport.deserializeUser((id, cb) => {
+    db.query('SELECT id, username FROM users WHERE id = $1', [id], (err, result) => {
+        if (err) {
+            return cb(err);
+        }
+        const user = result.rows[0];
+        if (!user) {
+            return cb(null, false);
+        }
+        cb(null, user);
+    });
 });
+
 
 app.use(inexistentPage);
 
