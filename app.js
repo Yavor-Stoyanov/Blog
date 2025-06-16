@@ -351,18 +351,22 @@ passport.serializeUser((user, cb) => {
 });
 
 passport.deserializeUser((id, cb) => {
+    console.log('deserializeUser called with id:', id);
+
     db.query('SELECT id, username FROM users WHERE id = $1', [id], (err, result) => {
         if (err) {
+            console.log('Error in deserializeUser:', err);
             return cb(err);
         }
         const user = result.rows[0];
         if (!user) {
+            console.log('User not found in deserializeUser');
             return cb(null, false);
         }
+        console.log('User found in deserializeUser:', user);
         cb(null, user);
     });
 });
-
 
 app.use(inexistentPage);
 
