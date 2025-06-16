@@ -347,6 +347,7 @@ passport.use(new Strategy({ usernameField: 'email' }, async (email, password, do
 }));
 
 passport.serializeUser((user, cb) => {
+    console.log('serializeUser called with user:', user);
     cb(null, user.id);
 });
 
